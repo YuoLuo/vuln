@@ -1,0 +1,462 @@
+/* 富文本编辑器自定义样式 */
+.ql-editor {
+  min-height: 150px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ql-toolbar {
+  border-top: 1px solid #d9d9d9;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  background: #fafafa;
+}
+
+.ql-container {
+  border-bottom: 1px solid #d9d9d9;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  background: white;
+}
+
+.ql-toolbar .ql-formats {
+  margin-right: 12px;
+}
+
+.ql-toolbar button:hover {
+  color: #1890ff;
+}
+
+.ql-toolbar .ql-active {
+  color: #1890ff;
+}
+
+/* 代码块样式 */
+.ql-editor pre.ql-syntax {
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  color: #24292e;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* 引用块样式 */
+.ql-editor blockquote {
+  border-left: 4px solid #1890ff;
+  margin: 16px 0;
+  padding: 8px 16px;
+  background-color: #f0f9ff;
+  font-style: italic;
+  color: #666;
+}
+
+/* 链接样式 */
+.ql-editor a {
+  color: #1890ff;
+  text-decoration: none;
+}
+
+.ql-editor a:hover {
+  text-decoration: underline;
+}
+
+/* 列表样式 */
+.ql-editor ul, .ql-editor ol {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.ql-editor li {
+  margin: 4px 0;
+}
+
+/* 图片样式 */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin: 8px 0;
+}
+
+/* 表格样式 */
+.ql-editor table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.ql-editor table td, 
+.ql-editor table th {
+  border: 1px solid #d9d9d9;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.ql-editor table th {
+  background-color: #fafafa;
+  font-weight: 600;
+}
+
+/* 焦点状态 */
+.ql-container.ql-focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* 修复焦点切换问题 */
+.ql-editor:focus {
+  outline: none;
+}
+
+/* 确保代码块不会捕获焦点 */
+.ql-editor pre.ql-syntax {
+  pointer-events: auto;
+  user-select: text;
+}
+
+/* 防止代码块内的文本选择影响编辑器焦点 */
+.ql-editor pre.ql-syntax:focus {
+  outline: 1px solid #1890ff;
+}
+
+/* 确保编辑器容器正确处理焦点 */
+.ql-editor[contenteditable="true"]:focus {
+  outline: none;
+}
+
+/* 修复代码块和普通文本之间的焦点切换 */
+.ql-editor .ql-code-block-container {
+  position: relative;
+  margin: 1em 0;
+}
+
+.ql-editor .ql-code-block-container::after {
+  content: "";
+  display: block;
+  height: 1px;
+  clear: both;
+}
+
+/* 确保代码块后面有足够的空间供点击 */
+.ql-editor .ql-code-block-container + * {
+  margin-top: 1em;
+}
+
+/* 修复代码块的换行行为 */
+.ql-editor .ql-code-block-container:last-child::after {
+  content: "";
+  display: block;
+  height: 20px;
+  pointer-events: none;
+}
+
+/* 确保可以在代码块外点击 */
+.ql-editor {
+  padding-bottom: 20px;
+}
+
+/* 防止代码块捕获所有点击事件 */
+.ql-editor pre.ql-syntax {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 在代码块之间和之后添加可点击区域 */
+.ql-editor > *:not(.ql-code-block-container) + .ql-code-block-container {
+  margin-top: 1em;
+}
+
+.ql-editor > .ql-code-block-container + *:not(.ql-code-block-container) {
+  margin-top: 1em;
+}
+
+/* 占位符样式 */
+.ql-editor.ql-blank::before {
+  color: #bfbfbf;
+  font-style: normal;
+}
+
+/* 代码片段卡片样式 */
+.code-block-card {
+  transition: all 0.3s ease;
+}
+
+.code-block-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 图片上传区域样式 */
+.image-upload-area {
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.image-upload-area:hover {
+  border-color: #1890ff;
+  background-color: #f0f9ff;
+}
+
+.image-upload-area.drag-over {
+  border-color: #1890ff;
+  background-color: #e6f7ff;
+}
+
+/* 代码编辑器模态框样式 */
+.ant-modal .monaco-editor {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* 自定义滚动条 */
+.ql-editor::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ql-editor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.ql-editor::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .ql-toolbar {
+    font-size: 12px;
+  }
+  
+  .ql-toolbar .ql-formats {
+    margin-right: 8px;
+  }
+  
+  .ql-editor {
+    font-size: 13px;
+    min-height: 120px;
+  }
+}
+
+/* 标签样式增强 */
+.ant-tag {
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-weight: 500;
+}
+
+/* 卡片标题样式 */
+.ant-card-head-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 按钮组样式 */
+.editor-button-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.editor-button-group .ant-btn {
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+/* 富文本编辑器容器稳定化 */
+.rich-text-editor-container {
+  position: relative;
+  isolation: isolate;
+  contain: layout style;
+}
+
+/* 防止编辑器消失的保护样式 */
+.ql-container {
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+.ql-editor {
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* 确保工具栏按钮不会干扰编辑器 */
+.ql-toolbar {
+  position: relative !important;
+  z-index: 1;
+}
+
+/* 防止工具栏按钮触发重新渲染 */
+.ql-toolbar button {
+  pointer-events: auto !important;
+}
+
+/* 外部工具栏按钮样式 */
+.editor-toolbar-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.editor-toolbar-buttons .ant-btn {
+  flex-shrink: 0;
+}
+
+/* 富文本编辑器包装器 */
+.rich-text-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.rich-text-wrapper .ql-container {
+  min-height: 100px;
+}
+
+/* 确保编辑器不会因为点击事件而消失 */
+.rich-text-wrapper .ql-editor {
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* 防止编辑器在点击外部按钮时重新渲染 */
+.rich-text-wrapper .quill {
+  position: relative;
+  background: white;
+}
+
+/* 提交按钮特效 */
+.submit-button {
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(24, 144, 255, 0.6) !important;
+}
+
+.submit-button.submitting {
+  pointer-events: none;
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+/* 彩虹渐变动画 */
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 提交成功后的脉冲动画 */
+@keyframes success-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+/* 取消按钮悬停效果 */
+.ant-btn:not(.ant-btn-primary):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* 页面加载动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ant-card {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.ant-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.ant-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* 代码片段卡片悬停特效 */
+.code-block-card:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.code-block-card:hover .ant-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.code-block-card:hover .ant-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}

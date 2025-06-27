@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// SQLite 不支持枚举，使用 String 替代
+// UserRole: SUPERADMIN, VULNERABILITY_REVIEWER, SECURITY_RESEARCHER, FIX_ENGINEER
+// VulnerabilityStatus: PENDING, APPROVED, REJECTED, NEED_INFO, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
+// VulnerabilitySeverity: CRITICAL, HIGH, MEDIUM, LOW, INFO
+// NotificationType: EMAIL, DINGTALK, WECHAT
+// NotificationEvent: VULNERABILITY_SUBMITTED, VULNERABILITY_APPROVED, VULNERABILITY_REJECTED, VULNERABILITY_NEED_INFO, VULNERABILITY_ASSIGNED, VULNERABILITY_RESOLVED
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  username    String   @unique
+  password    String
+  firstName   String?
+  lastName    String?
+  avatar      String?
+  role        String @default("SECURITY_RESEARCHER")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关系
+  submittedVulnerabilities Vulnerability[]        @relation("SubmitterVulnerabilities")
+  assignedVulnerabilities  Vulnerability[]        @relation("AssigneeVulnerabilities")
+  reviews                  VulnerabilityReview[]
+  notifications            Notification[]
+  settings                 UserNotificationSettings?
+
+  @@map("users")
+}
+
+model UserNotificationSettings {
+  id        String              @id @default(cuid())
+  userId    String              @unique
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  emailEnabled     Boolean @default(true)
+  dingtalkEnabled  Boolean @default(false)
+  wechatEnabled    Boolean @default(false)
+  
+  dingtalkWebhook  String?
+  wechatWebhook    String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_notification_settings")
+}
+
+model Vulnerability {
+  id          String                @id @default(cuid())
+  title       String
+  description String
+  codeSnippet String?               // 代码片段
+  severity    String
+  status      String   @default("PENDING")
+  
+  // 漏洞详情
+  affectedSystem  String?           // 受影响系统
+  reproductionSteps String?         // 复现步骤
+  impact          String?           // 影响描述
+  recommendation  String?           // 修复建议
+  
+  // 附件 (SQLite 不支持 Json，使用 String 存储 JSON)
+  attachments     String?           // 存储文件路径数组的JSON字符串
+  
+  // 关系
+  submitterId String
+  submitter   User   @relation("SubmitterVulnerabilities", fields: [submitterId], references: [id])
+  
+  assigneeId  String?
+  assignee    User?   @relation("AssigneeVulnerabilities", fields: [assigneeId], references: [id])
+  
+  reviews      VulnerabilityReview[]
+  notifications Notification[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("vulnerabilities")
+}
+
+model VulnerabilityReview {
+  id              String   @id @default(cuid())
+  vulnerabilityId String
+  reviewerId      String
+  status          String // 审核结果
+  comment         String?             // 审核意见
+  
+  vulnerability   Vulnerability @relation(fields: [vulnerabilityId], references: [id], onDelete: Cascade)
+  reviewer        User          @relation(fields: [reviewerId], references: [id])
+  
+  createdAt       DateTime @default(now())
+
+  @@map("vulnerability_reviews")
+}
+
+model Notification {
+  id              String            @id @default(cuid())
+  userId          String
+  vulnerabilityId String?
+  type            String
+  event           String
+  title           String
+  message         String
+  isSent          Boolean           @default(false)
+  sentAt          DateTime?
+  error           String?           // 发送失败时的错误信息
+  
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vulnerability   Vulnerability?    @relation(fields: [vulnerabilityId], references: [id], onDelete: SetNull)
+  
+  createdAt       DateTime          @default(now())
+
+  @@map("notifications")
+}
+
+model SystemSettings {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_settings")
+}

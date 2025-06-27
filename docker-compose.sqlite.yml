@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      DATABASE_URL: file:/app/data/vnlu.db
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      NODE_ENV: production
+      PORT: 3001
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USER: your-email@gmail.com
+      SMTP_PASS: your-app-password
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server/logs:/app/logs
+      - ./data:/app/data
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+volumes:
+  sqlite_data:
